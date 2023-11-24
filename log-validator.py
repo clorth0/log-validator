@@ -3,9 +3,9 @@ from datetime import datetime
 
 # Example regex for syslog timestamp - modify as per your syslog format
 timestamp_regex = r'\w{3}\s+\d{1,2}\s+\d{2}:\d{2}:\d{2}'  # Example: 'Jan  1 00:00:00'
-hostname_regex = r'your-hostname-regex'  # Define the regex for hostname
-tag_regex = r'your-tag-regex'  # Define the regex for the tag
-message_regex = r'your-message-regex'  # Define the regex for the message content
+hostname_regex = r'[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*'  # Define the regex for hostname
+tag_regex = r'[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*'  # Define the regex for the tag
+message_regex = r'[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*'  # Define the regex for the message content
 
 def is_valid_timestamp(timestamp):
     try:
