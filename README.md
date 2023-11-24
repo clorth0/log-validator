@@ -1,6 +1,6 @@
 # Log File Validator
 
-This Python script is designed to validate log files according to specific format and content requirements as it relates to M21-31 requirements. It checks each log entry for proper formatting, presence of required data fields, and correct data formats.
+This Python script is designed to validate log files according to specific format and content requirements as it relates to [M21-31 requirements]( https://www.whitehouse.gov/wp-content/uploads/2021/08/M-21-31-Improving-the-Federal-Governments-Investigative-and-Remediation-Capabilities-Related-to-Cybersecurity-Incidents.pdf). It checks each log entry for proper formatting, presence of required data fields, and correct data formats.
 
 ## Requirements
 
