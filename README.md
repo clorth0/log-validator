@@ -12,38 +12,36 @@ No additional libraries are required to run this script. It uses standard Python
 
 ## Usage
 
-Place your log file in the same directory as the script, or provide the path to the log file when running the script.
+1. Place your syslog file in the same directory as the script, or provide the path to the syslog file when running the script.
+2. Define the path for the output file where you want to store the validation results.
 
 Run the script with:
 ```bash
-python log_file_validator.py
+python syslog_file_validator.py
 ```
 
 ## Features
 
-The script validates the following fields in each log entry:
+The script validates the following components in each syslog entry:
 
-1. Properly formatted and accurate timestamp
-2. Status code for the event type
-3. Device identifier (e.g., MAC address)
-4. Session / Transaction ID
-5. Autonomous System Number (ASN)
-6. Source IP (IPv4 and IPv6)
-7. Destination IP (IPv4 and IPv6)
-8. Status Code
-9. Response Time
-10. Additional headers (e.g., HTTP headers)
-11. Username and/or UserID
-12. Command executed
-13. Data formatted as key-value pairs
-14. Unique event identifier for event correlation
+1. Timestamp
+2. Hostname
+3. Tag
+4. Message content
+5. Priority value (optional, based on your syslog format)
 
-Each field is validated using regular expressions and specific validation logic defined in the script.
+The validation results for each entry are written to a specified output file.
 
 ## Customization
 
-You can customize the script by modifying the regular expressions and validation logic to match your specific log file format and requirements.
+1. Modify the regular expressions for timestamp, hostname, tag, and message content to match your specific syslog file format.
+2. Set the `log_file_path` to the path of your syslog file.
+3. Set the `output_file_path` to your desired output file path where the results will be saved.
+
+## Output
+
+The script writes the validation results to the output file specified. Each entry in the output file corresponds to a syslog entry from the input file, along with any validation errors found.
 
 ## Note
 
-This script is a template and might require adjustments to fit the specific format and requirements of your log files. Ensure to replace placeholder regex patterns with the ones that match your log file's format.
+This script is a template and might require adjustments to fit the specific format and requirements of your syslog files. Ensure to replace placeholder regex patterns with the ones that match your syslog file's format.

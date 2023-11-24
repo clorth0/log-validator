@@ -58,14 +58,15 @@ def validate_syslog_entry(entry):
 
     return len(errors) == 0, ', '.join(errors)
 
-def main(log_file_path):
-    with open(log_file_path, 'r') as file:
+def main(log_file_path, output_file_path):
+    with open(log_file_path, 'r') as file, open(output_file_path, 'w') as output_file:
         for line in file:
             entry = line.strip()
             is_valid, error = validate_syslog_entry(entry)
             if not is_valid:
-                print(f"Invalid entry: {entry}\nError: {error}")
+                output_file.write(f"Invalid entry: {entry}\nError: {error}\n\n")
 
 if __name__ == "__main__":
-    log_file_path = 'path_to_your_syslog_file.log'
-    main(log_file_path)
+    log_file_path = 'path_to_your_syslog_file.log'  # Replace with the path to your syslog file
+    output_file_path = 'path_to_output_file.txt'  # Replace with your desired output file path
+    main(log_file_path, output_file_path)
