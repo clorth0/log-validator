@@ -1,41 +1,71 @@
+import re
+from datetime import datetime
 
-# Syslog File Validator
+# Example regex for syslog timestamp - modify as per your syslog format
+timestamp_regex = r'\w{3}\s+\d{1,2}\s+\d{2}:\d{2}:\d{2}'  # Example: 'Jan  1 00:00:00'
+hostname_regex = r'your-hostname-regex'  # Define the regex for hostname
+tag_regex = r'your-tag-regex'  # Define the regex for the tag
+message_regex = r'your-message-regex'  # Define the regex for the message content
 
-This Python script is designed to validate log files according to specific format and content requirements as it relates to [M21-31 requirements]( https://www.whitehouse.gov/wp-content/uploads/2021/08/M-21-31-Improving-the-Federal-Governments-Investigative-and-Remediation-Capabilities-Related-to-Cybersecurity-Incidents.pdf). It checks each log entry for proper formatting, presence of required data fields, and correct data formats.
+def is_valid_timestamp(timestamp):
+    try:
+        datetime.strptime(timestamp, '%b %d %H:%M:%S')
+        return True
+    except ValueError:
+        return False
 
-## Requirements
+def is_valid_hostname(hostname):
+    return bool(re.match(hostname_regex, hostname))
 
-- Python 3.x
+def is_valid_tag(tag):
+    return bool(re.match(tag_regex, tag))
 
-## Setup
+def is_valid_message(message):
+    return bool(re.match(message_regex, message))
 
-No additional libraries are required to run this script. It uses standard Python libraries.
+def parse_syslog_entry(entry):
+    # Example syslog format: <Priority>Timestamp Hostname Tag: Message
+    parts = entry.split(' ', 4)
+    if len(parts) < 5:
+        return None, 'Incomplete entry'
 
-## Usage
+    priority, timestamp, hostname, tag, message = parts
+    return {
+        'priority': priority,
+        'timestamp': timestamp,
+        'hostname': hostname,
+        'tag': tag.rstrip(':'),
+        'message': message
+    }, None
 
-Place your syslog file in the same directory as the script, or provide the path to the syslog file when running the script.
+def validate_syslog_entry(entry):
+    fields, error = parse_syslog_entry(entry)
+    if error:
+        return False, error
 
-Run the script with:
-```bash
-python syslog_file_validator.py
-```
+    errors = []
+    if not is_valid_timestamp(fields['timestamp']):
+        errors.append('Invalid timestamp')
 
-## Features
+    if not is_valid_hostname(fields['hostname']):
+        errors.append('Invalid hostname')
 
-The script validates the following components in each syslog entry:
+    if not is_valid_tag(fields['tag']):
+        errors.append('Invalid tag')
 
-1. Timestamp
-2. Hostname
-3. Tag
-4. Message content
-5. Priority value (optional, based on your syslog format)
+    if not is_valid_message(fields['message']):
+        errors.append('Invalid message')
 
-Each part is parsed and validated using regular expressions and specific validation logic defined in the script.
+    return len(errors) == 0, ', '.join(errors)
 
-## Customization
+def main(log_file_path):
+    with open(log_file_path, 'r') as file:
+        for line in file:
+            entry = line.strip()
+            is_valid, error = validate_syslog_entry(entry)
+            if not is_valid:
+                print(f"Invalid entry: {entry}\nError: {error}")
 
-You can customize the script by modifying the regular expressions and validation logic to match your specific syslog file format and requirements.
-
-## Note
-
-This script is a template and might require adjustments to fit the specific format and requirements of your syslog files. Ensure to replace placeholder regex patterns with the ones that match your syslog file's format.
+if __name__ == "__main__":
+    log_file_path = 'path_to_your_syslog_file.log'
+    main(log_file_path)
